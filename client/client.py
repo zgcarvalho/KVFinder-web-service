@@ -116,9 +116,9 @@ if __name__ == "__main__":
     # local server 
     kv = KVClient("http://localhost", "8081")
     # remote server
-    # kv = KVClient("http://parkvfinder")
+    # kv = KVClient("http://parkvfinder.cnpem.br", "8081")
     # create a job using a pdb file with default configuration (code to configure is not implemented)
-    job = KVJob("kv1000/4GOU_A.pdb")
+    job = KVJob("examples/1FMO.pdb")
     # send job to server and wait until completion
     kv.run(job)
     # print job results
