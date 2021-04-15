@@ -64,7 +64,7 @@ TODO: Descrever os campos do json de input...
 
 Método: `GET`
 
-Onde `{id}` é o __id__ recebido durante a submissão do _job_.
+Onde `{id}` é o *id* recebido durante a submissão do /job/.
 
 TODO: Descrever o json de output e exemplificar em diferentes estados de execução...
 
@@ -83,11 +83,11 @@ Após alterações nos códigos-fonte o sistema precisa ser recompilado com
 $ docker-compose up --build
 #+end_src
 
-Para iniciar mais de um _worker_ e assim tornar o sistema capaz de executar
-mais de 1 _job_ simultaneamente (exemplo com 2 _workers_). __Precisa de mais testes__.
+Para iniciar mais de um /worker/ e assim tornar o sistema capaz de executar
+mais de 1 /job/ simultaneamente (exemplo com 2 /workers/). *Precisa de mais testes*.
 
 #+begin_src
 $ docker-compose up --scale kv-worker=2
 #+end_src
 
-Por ainda ser um sistema em fase de testes o tempo de _timeout_ de um _job_ está em __12 minutos__ e o tempo que esse _job_ permanece disponível ("_expires_after_") está em __6 minutos__. Em produção o _job_ deverá permanecer disponível por algo como __1 dia__.  
+Por ainda ser um sistema em fase de testes o tempo de /timeout/ de um /job/ está em *12 minutos* e o tempo que esse /job/ permanece disponível (/"expires_after"/) está em *6 minutos*. Em produção o /job/ deverá permanecer disponível por algo como *1 dia*.
