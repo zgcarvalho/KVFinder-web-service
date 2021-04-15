@@ -90,4 +90,4 @@ mais de 1 /job/ simultaneamente (exemplo com 2 /workers/). *Precisa de mais test
 $ docker-compose up --scale kv-worker=2
 #+end_src
 
-Por ainda ser um sistema em fase de testes o tempo de /timeout/ de um /job/ está em *12 minutos* e o tempo que esse /job/ permanece disponível (/"expires_after"/) está em *6 minutos*. Em produção o /job/ deverá permanecer disponível por algo como *1 dia*.
+Por ainda ser um sistema em fase de testes o tempo de /timeout/ de um /job/ está em *12 minutos* e o tempo que esse /job/ permanece disponível ("/expires_after/") está em *6 minutos*. Em produção o /job/ deverá permanecer disponível por algo como *1 dia*.
