@@ -8,11 +8,11 @@
 
 Welcome to the KVFinder-web service, this page was built to help you get started with our web service.
 
-KVFinder-web service is a RESTful web service that runs [[parKVFinder][https://github.com/LBC-LNBio/parKVFinder]] software to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
+KVFinder-web service is a RESTful web service that runs [[https://github.com/LBC-LNBio/parKVFinder][parKVFinder]] software to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
 
 ** Publicly available KVFinder-web service
 
-We provide a publicly available KVFinder-web service (http://parkvfinder.cnpem.br), running in a Cloud environment, that has some limitations compared to parKVFinder local installation, which are stated on the [[documentation][https://lbc-lnbio.github.io/KVFinder-web]]. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
+We provide a publicly available KVFinder-web service (http://parkvfinder.cnpem.br), running in a Cloud environment, that has some limitations compared to parKVFinder local installation, which are stated on the [[https://lbc-lnbio.github.io/KVFinder-web][documentation]]. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
 
 ** Local install
 
@@ -164,7 +164,7 @@ Example of response obtained for a job with status "completed".
 
 In this repository, we provide a simple Python client (~client/client.py~) to interact with KVFinder-web service by requests package.
 
-However, the recommended client is a PyMOL plugin, named PyMOL KVFinder-web Tools, that integrates KVFinder-web service with PyMOL. For more information, refer to the PyMOL KVFinder-web Tools [[repository][https://github.com/LBC-LNBio/PyMOL-KVFinder-web-tools]].
+However, the recommended client is a PyMOL plugin, named PyMOL KVFinder-web Tools, that integrates KVFinder-web service with PyMOL. For more information, refer to the PyMOL KVFinder-web Tools [[https://github.com/LBC-LNBio/PyMOL-KVFinder-web-tools][repository]].
 
 By default the PyMOL KVFinder-web Tools, users is configured to our publicly available KVFinder-web service. If users wish to use it with a locally configured server, users must change the server url hardcoded on the ~__init__.py~ file and reinstall the client plugin on PyMOL.
 
