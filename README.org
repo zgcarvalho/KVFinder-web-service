@@ -14,7 +14,7 @@ KVFinder-web service is a RESTful web service that runs [[https://github.com/LBC
 
 We provide a publicly available KVFinder-web service (http://parkvfinder.cnpem.br), running in a Cloud environment, that has some limitations compared to parKVFinder local installation, which are stated on the [[https://lbc-lnbio.github.io/KVFinder-web][documentation]]. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
 
-** Local install
+** Local installation
 
 To run this web service in linux distributions it is necessary to install docker-compose and its dependencies. In Debian/Ubuntu and derivatives, execute:
 
@@ -132,7 +132,7 @@ Example of job request:
 #+end_src
 
 
-*** Request a result
+*** Request a job result
 
 *GET /:id*
 
@@ -141,7 +141,7 @@ Example of job request:
 
 Where *:id*  is the job id received from the server as submission response.
 
-Example of response obtained for a job with status "completed".
+Example of response obtained for a job with status "completed":
 
 #+begin_src json
 {
@@ -196,4 +196,3 @@ Documentation are available at https://lbc-lnbio.github.io/KVFinder-web.
 
 The software is licensed under the terms of the Apache-2.0 License and is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache-2.0 License for more details.
 
----
