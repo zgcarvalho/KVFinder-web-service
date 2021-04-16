@@ -171,15 +171,19 @@ By default the PyMOL KVFinder-web Tools, users is configured to our publicly ava
 From:
 
 #+begin_src python
-# Server                                 #
-server = "http://parkvfinder.cnpem.br"   #
+# Server                                 
+server = "http://parkvfinder.cnpem.br"   
+# Port 
+port = "8081" 
 #+end_src
 
 to:
 
 #+begin_src python
-# Server                                 #
-server = "http://localhost"              #
+# Server                                 
+server = "http://localhost"              
+# Port 
+port = "8081" 
 #+end_src
 
 Note that if the KVFinder-web service is on another computer on your network, you must provide the IP Address instead of localhost.
