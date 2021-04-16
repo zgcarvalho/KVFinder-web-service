@@ -1,8 +1,7 @@
 * KVFinder web service
 
-# [[https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service.svg?color=informational][Github Release]]
+[[GitHub Release][https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service.svg?color=informational]]
 [[https://opensource.org/licenses/Apache-2.0][https://img.shields.io/badge/License-Apache%202.0-blue.svg]]
-# [[GitHub Release](https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service.svg?color=informational)
 # [![L](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 # <!-- [![DOI](http://joss.theoj.org/papers)](http://joss.theoj.org/papers) -->
 
