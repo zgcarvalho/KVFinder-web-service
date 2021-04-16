@@ -1,8 +1,20 @@
 * KVFinder web service
 
-** Local install
+[[GitHub Release][https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service.svg?color=informational]]
+[[https://opensource.org/licenses/Apache-2.0][https://img.shields.io/badge/License-Apache%202.0-blue.svg]]
+# [[GitHub Release](https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service.svg?color=informational)
+# [![L](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# <!-- [![DOI](http://joss.theoj.org/papers)](http://joss.theoj.org/papers) -->
 
-KVFinder-web-service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
+Welcome to the KVFinder-web service, this page was built to help you get started with our web service.
+
+KVFinder-web service is a RESTful web service that runs [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
+
+** Publicly available KVFinder-web service
+
+We provide a publicly available KVFinder-web service (https://parkvfinder.cnpem.br), running in a Cloud environment, that has some limitations compared to parKVFinder local installation, which are stated on the [documentation](https://lbc-lnbio.github.io/KVFinder-web). Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
+
+** Local install
 
 To run this web service in linux distributions it is necessary to install docker-compose and its dependencies. In Debian/Ubuntu and derivatives, execute:
 
@@ -10,39 +22,57 @@ To run this web service in linux distributions it is necessary to install docker
 $ sudo apt install docker-compose
 #+end_example
 
-After the docker-compose installation and copy/clone of this repository, you can execute the command bellow from the repository's root path.
+After the docker-compose installation and copy/clone of this repository. To start KVFinder-web service, you can execute the command bellow at the root  of KVFinder-web-service repository (where docker-compose.yml file is located):
 
 #+begin_src
 $ docker-compose up
 #+end_src
 
-or
+To start the KVFinder-web service in background:
 
 #+begin_src
 $ docker-compose up -d
 #+end_src
 
-to execute the service in background.
-
-To stop the web service execution run the command:
+To interrupt an active KVFinder-web service instance, run:
 
 #+begin_src
 $ docker-compose down
 #+end_src
 
-or with the flag /--volumes/ to destroy files and directories where the parkfinder saves processed jobs.
+To stop and erase the volumes that store the queue module data and the job folders and files, run:
 
 #+begin_src
 $ docker-compose down --volumes
 #+end_src
 
-The web service uses port 8081 by default. If the local installation was successfully the link bellow should present a text message like: "KVFinder Web". You can use a browser to test.
+The KVFinder-web service uses port 8081 by default. If the local installation was successfully, the link bellow should present a text message like: "KVFinder Web". You can use a browser to test.
 
 [[http://localhost:8081][http://localhost:8081]]
 
-Job queue information can be
+Job queue information can be accessed at:
 
 [[http://localhost:8023/info][http://localhost:8023/info]]
+
+*** Extra configuration
+
+After changes in the source code, the containers must be rebuild.
+
+#+begin_src
+$ docker-compose build
+#+end_src
+
+or
+
+#+begin_src
+$ docker-compose up --build
+#+end_src
+
+To start more than one worker module and thus make KVFinder-web service capable of running more than one job simultaneously. For instance, to start with two worker modules:
+
+#+begin_src
+$ docker-compose up --scale kv-worker=2
+#+end_src
 
 ** API
 
@@ -54,7 +84,7 @@ Job queue information can be
 - Method: POST
 - Media type: 'application/json'
 
-Example request:
+Example of job request:
 
 #+begin_src json
 {
@@ -109,10 +139,7 @@ Example request:
 - URL: [[http://localhost:8081/:id][http://localhost:8081/:id]]
 - Method: GET
 
-
 Where *:id*  is the job id received from the server as submission response.
-
-Exemplo de json de resposta após o /job/ ter sido executado com sucesso
 
 Example of response obtained for a job with status "completed".
 
@@ -133,29 +160,36 @@ Example of response obtained for a job with status "completed".
 #+end_src
 
 
-# ** Cliente integrado ao PyMOL: PyMOL KVFinder-web Tools
+** Client
 
-# O cliente PyMOL KVFinder-web Tools está disponível em `client/PyMOL-KVFinder-web-Tools`.
+In this repository, we provide a simple Python client (~client/client.py~) to interact with KVFinder-web service by requests package.
 
-# Para mais informações, use o guia disponível [aqui](https://github.com/jvsguerra/kvfinder-ws/blob/master/client/PyMOL-KVFinder-web-tools/README.md)
+However, the recommended client is a PyMOL plugin, named PyMOL KVFinder-web Tools, that integrates KVFinder-web service with PyMOL. For more information, refer to the PyMOL KVFinder-web Tools [repository](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-tools).
 
+By default the PyMOL KVFinder-web Tools, users is configured to our publicly available KVFinder-web service. If users wish to use it with a locally configured server, users must change the server url hardcoded on the ~__init__.py~ file and reinstall the client plugin on PyMOL.
 
-# ** Configurações
+From:
 
-
-
-** Notes
-
-1. After source code modifications or update the containers must be rebuild.
-
-#+begin_src
-$ docker-compose up --build
+#+begin_src python
+# Server                                 #
+server = "http://parkvfinder.cnpem.br"   #
 #+end_src
 
-2. To increase the number workers and process more than 1 job simultaneously.
+to:
 
-#+begin_src
-$ docker-compose up --scale kv-worker=2
+#+begin_src python
+# Server                                 #
+server = "http://localhost"              #
 #+end_src
 
-# Por ainda ser um sistema em fase de testes o tempo de /timeout/ de um /job/ está em *12 minutos* e o tempo que esse /job/ permanece disponível ("/expires_after/") está em *6 minutos*. Em produção o /job/ deverá permanecer disponível por algo como *1 dia*.
+Note that if the KVFinder-web service is on another computer on your network, you must provide the IP Address instead of localhost.
+
+** Documentation
+
+Documentation are available at https://lbc-lnbio.github.io/KVFinder-web.
+
+** License
+
+The software is licensed under the terms of the Apache-2.0 License and is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache-2.0 License for more details.
+
+---

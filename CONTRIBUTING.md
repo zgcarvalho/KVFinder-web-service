@@ -1,13 +1,13 @@
 # Contributing
 
-PyMOL KVFinder-web Tools uses of GitHub for project management. 
+KVFinder-web-service uses of GitHub for project management. 
 
 Please help us by reporting any problems or requests. 
 
-On [Issues](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools/issues) page, you can file a:
+On [Issues](https://github.com/LBC-LNBio/KVFinder-web-service/issues) page, you can file a:
     
-    * [Bug Report](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools/issues/new?assignees=&labels=&template=bug_report.md&title=)
-    * [Request for a new feature](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools/issues/new?assignees=&labels=&template=feature_request.md&title=)
+- [Bug Report](https://github.com/LBC-LNBio/KVFinder-web-service/issues/new?assignees=&labels=&template=bug_report.md&title=)
+- [Request for a new feature](https://github.com/LBC-LNBio/KVFinder-web-service/issues/new?assignees=&labels=&template=feature_request.md&title=)
 
 Only make sure the bug or request has not already been reported. Click on “Search” and enter some keywords to search.
 
