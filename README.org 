@@ -1,62 +1,60 @@
 * KVFinder web service
 
-** Instalação local
+** Local install
 
-O KVFinder-web-service é formado por três módulos. O módulo web, o módulo de fila e o módulo de execução. Cada módulo é executado em um container (docker) separado e integrados utilizando o docker-compose.
+KVFinder-web-service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
 
-Logo, para executar o kvfinder-web-service é necessário ter instalado o docker-compose. Em distribuições derivadas do Debian e Ubuntu, o comando para instalá-lo será:
+To run this web service in linux distributions it is necessary to install docker-compose and its dependencies. In Debian/Ubuntu and derivatives, execute:
 
 #+begin_example
 $ sudo apt install docker-compose
 #+end_example
 
-O kvfinder-web-service é iniciado utilizando o comando abaixo na raiz do diretório desse repositório (onde está localizado o arquivo docker-compose.yml).
+After the docker-compose installation and copy/clone of this repository, you can execute the command bellow from the repository's root path.
 
 #+begin_src
 $ docker-compose up
 #+end_src
 
-ou 
+or
 
 #+begin_src
 $ docker-compose up -d
 #+end_src
 
-para executar em segundo plano.
+to execute the service in background.
 
-Os comandos abaixo interrompem a execução do kvfinder-web-service.
+To stop the web service execution run the command:
 
 #+begin_src
 $ docker-compose down
 #+end_src
 
-ou 
+or with the flag /--volumes/ to destroy files and directories where the parkfinder saves processed jobs.
 
 #+begin_src
 $ docker-compose down --volumes
 #+end_src
 
-para destruir os "volumes" que armazem os dados das filas e as pastas com os arquivos dos /jobs/.
-
-O web service estará acessível em:
+The web service uses port 8081 by default. If the local installation was successfully the link bellow should present a text message like: "KVFinder Web". You can use a browser to test.
 
 [[http://localhost:8081][http://localhost:8081]]
 
-Informações da fila de /jobs/ poderão ser visualizadas em:
+Job queue information can be
 
-[[http://localhost:8081/info][http://localhost:8081/info]]
+[[http://localhost:8023/info][http://localhost:8023/info]]
 
 ** API
 
-*** Criar um job
+*** Create a job
 
 *POST /create*
 
 - URL: [[http://localthost:8081/create][http://localhost:8081/create]]
-- Método: POST
+- Method: POST
 - Media type: 'application/json'
 
-Exemplo do json de submissão:
+Example request:
 
 #+begin_src json
 {
@@ -104,16 +102,19 @@ Exemplo do json de submissão:
 #+end_src
 
 
-*** Solicitar os resultados de um job
+*** Request a result
 
 *GET /:id*
 
 - URL: [[http://localhost:8081/:id][http://localhost:8081/:id]]
-- Método: GET
+- Method: GET
 
-Onde *:id* é o id recebido após a submissão do /job/.
+
+Where *:id*  is the job id received from the server as submission response.
 
 Exemplo de json de resposta após o /job/ ter sido executado com sucesso
+
+Example of response obtained for a job with status "completed".
 
 #+begin_src json
 {
@@ -143,16 +144,15 @@ Exemplo de json de resposta após o /job/ ter sido executado com sucesso
 
 
 
-** Observações
+** Notes
 
-Após alterações no códigos-fonte o sistema precisa ser recompilado com 
+1. After source code modifications or update the containers must be rebuild.
 
 #+begin_src
 $ docker-compose up --build
 #+end_src
 
-Para iniciar mais de um /worker/ e assim tornar o sistema capaz de executar
-mais de 1 /job/ simultaneamente.
+2. To increase the number workers and process more than 1 job simultaneously.
 
 #+begin_src
 $ docker-compose up --scale kv-worker=2
