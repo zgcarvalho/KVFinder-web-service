@@ -2,7 +2,11 @@ mod kv {
     pub mod worker;
     pub mod webserver;
 
+    extern crate base64;
+    extern crate zstd;
     use serde::{Deserialize, Serialize};
+    use std::io;
+    use std::error::Error;
 
     #[derive(Serialize, Deserialize, Debug)]
     struct KVParameters {
@@ -155,14 +159,31 @@ mod kv {
         }
     }
 
+    fn compress(s: &String) -> Result<String, io::Error> {
+        let v = zstd::block::compress(s.as_bytes(), 1)?;
+        Ok(base64::encode(&v))
+    }
+
+    fn decompress(b64: &String) -> Result<String, Box<dyn Error>> {
+        let s = base64::decode(&b64)?;
+        Ok(String::from_utf8(zstd::stream::decode_all(s.as_slice())?)?)
+    }
+
+
+    #[derive(Serialize, Deserialize)]
+    struct Data {
+        tags: [String; 1],
+        input: Input,
+    }
+
     #[derive(Serialize, Deserialize, Debug)]
     #[serde(deny_unknown_fields)]
     pub struct Input {
         settings: KVSettings,
-        pdb: Vec<String>,
-        // pdb: String,
-        pdb_ligand: Option<Vec<String>>,
-        // pdb_ligand: Option<String>
+        // pdb: Vec<String>,
+        pdb: String,
+        // pdb_ligand: Option<Vec<String>>,
+        pdb_ligand: Option<String>,
     }
 
     impl Input {
@@ -230,7 +251,8 @@ mod kv {
         fn get_pdb_boundaries(&self) -> Result<PdbBoundaries, &str> {
             let coords: Option<PdbBoundaries> = self
                 .pdb
-                .iter()
+                // .iter()
+                .lines()
                 .filter(|s| s.starts_with("ATOM"))
                 .map(|s| {
                     let (x, y, z) = (
@@ -281,12 +303,6 @@ mod kv {
         pdb_kv: String,
         report: String,
         log: String,
-    }
-
-    #[derive(Serialize, Deserialize)]
-    struct Data {
-        tags: [String; 1],
-        input: Input,
     }
 }
 
