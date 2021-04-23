@@ -112,6 +112,7 @@ mod kv {
     }
 
     impl PdbBoundaries {
+        // check if kvbox is inside pdb boundaries
         fn contains(&self, kvbox: &KVSInternalbox) -> bool {
             if self.x_min > kvbox.p1.x
                 || self.x_min > kvbox.p2.x
@@ -159,6 +160,13 @@ mod kv {
         }
     }
 
+    // Compression and decompression are applied to text data (pdb file content,
+    // parkvfinder results) respectively when they are sent and get from queue to
+    // reduce ocypod (redis) memory usage.
+    // zstd 1 shows more compression than 3 (~4x for pdb files) in addition
+    // to better performance
+    // base64 representation increases binary size in 1/3 (string size = 4/3 * binary size)
+    // the combination results in a compression ratio of ~3x
     fn compress(s: &String) -> Result<String, io::Error> {
         let v = zstd::block::compress(s.as_bytes(), 1)?;
         Ok(base64::encode(&v))
@@ -180,13 +188,14 @@ mod kv {
     #[serde(deny_unknown_fields)]
     pub struct Input {
         settings: KVSettings,
-        // pdb: Vec<String>,
         pdb: String,
-        // pdb_ligand: Option<Vec<String>>,
         pdb_ligand: Option<String>,
     }
 
     impl Input {
+        /// Check if parameters received from a client (users) are ok.
+        /// Some parameters have constraints in this web service to prevent heavy
+        /// jobs that could block or slow down the server.
         fn check(&self) -> Result<(), &str> {
             // Compare Whole protein and Box modes
             if self.settings.modes.whole_protein_mode == self.settings.modes.box_mode {
@@ -235,7 +244,7 @@ mod kv {
                 return Err("Invalid parameters file! Ligand cutoff must be greater than 0!");
             }
 
-            // Box inside pdb grid
+            // Box inside pdb boundaries
             if self.settings.modes.box_mode {
                 if let Ok(pdb_boundaries) = self.get_pdb_boundaries() {
                     if !pdb_boundaries.contains(&self.settings.internalbox) {
@@ -248,10 +257,12 @@ mod kv {
             Ok(())
         }
 
+        /// Get boundaries of a PDB file.
+        /// Boundaries are defined as minimum/maximum values for each cartesian axis with
+        /// subtraction/addition of probe value plus 20 angstrons.
         fn get_pdb_boundaries(&self) -> Result<PdbBoundaries, &str> {
             let coords: Option<PdbBoundaries> = self
                 .pdb
-                // .iter()
                 .lines()
                 .filter(|s| s.starts_with("ATOM"))
                 .map(|s| {
@@ -286,6 +297,8 @@ mod kv {
 
             match coords {
                 Some(c) => Ok(PdbBoundaries {
+                    // we define pdb boundaries adding probe out and also 20 angstrons to each
+                    // direction
                     x_min: c.x_min - (self.settings.probes.probe_out + 20.0),
                     x_max: c.x_max + (self.settings.probes.probe_out + 20.0),
                     y_min: c.y_min - (self.settings.probes.probe_out + 20.0),

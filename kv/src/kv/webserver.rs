@@ -25,8 +25,9 @@ struct QueueConfig<'a> {
     retries: i32,
 }
 
-pub fn hello() -> impl Responder {
-    "KVFinder Web"
+// GET /
+pub async fn hello() -> impl Responder {
+    "KVFinder Web Service"
 }
 
 pub fn create_ocypod_queue(
@@ -49,8 +50,12 @@ pub fn create_ocypod_queue(
     // }
 }
 
+
+/// Get job queue id for a job "tag id". The tag id is created applying a hash
+/// function to received data (input data). It is the id sent to users. The queue
+/// id is for internal use only and increase sequentially.
+/// If tag id is not found returns Ok(None).
 fn get_queue_id(tag_id: &String) -> Result<Option<u32>, reqwest::Error> {
-    // let url = format!("http://0.0.0.0:8023/tag/{}", tag_id);
     let url = format!("http://ocypod:8023/tag/{}", tag_id);
 
     // ids because in theory could be more than one with the same tag, BUT if this happen there is an error
@@ -61,10 +66,11 @@ fn get_queue_id(tag_id: &String) -> Result<Option<u32>, reqwest::Error> {
     Ok(ids.pop())
 }
 
+/// Use tag id job to get job data from queue.
+/// If tag id not found returns Ok(None).
 fn get_job(tag_id: String) -> Result<Option<Job>, reqwest::Error> {
     let queue_id = get_queue_id(&tag_id);
     let job = |queue_id| {
-        // let url = format!("http://0.0.0.0:8023/job/{}?fields=status,output,created_at,started_at,ended_at,expires_after", queue_id);
         let url = format!("http://ocypod:8023/job/{}?fields=status,output,created_at,started_at,ended_at,expires_after", queue_id);
         let mut j: Job = reqwest::get(url.as_str())?.json()?;
         j.id = tag_id;
@@ -87,7 +93,12 @@ fn get_job(tag_id: String) -> Result<Option<Job>, reqwest::Error> {
     }
 }
 
-pub fn ask(id: web::Path<String>) -> impl Responder {
+/// GET /:id
+/// This :id requested by by users through HTTP is the tag id.
+/// If the :id is found returns an HTTP response with output data which includes
+/// processing status: "queued", "running", "completed"...
+/// If :id is not found returns NOT FOUND (Code 404)
+pub async fn ask(id: web::Path<String>) -> impl Responder {
     let tag_id = id.into_inner();
     let job = get_job(tag_id);
     match job {
@@ -97,12 +108,18 @@ pub fn ask(id: web::Path<String>) -> impl Responder {
     }
 }
 
-pub fn create(job_input: web::Json<Input>) -> impl Responder {
+/// POST /create
+/// Receives input data (json sent by users), creates a job, sends it to queue and
+/// responds the user (http response) with the job id.
+/// Also, before create a job, it checks if a job with the same parameters (hash -> tag id)
+/// are not yet into queue. If it is, it responds with job data.
+pub async fn create(job_input: web::Json<Input>) -> impl Responder {
     // json input values to inp
     let input = job_input.into_inner();
     if let Err(e) = &input.check() {
         return HttpResponse::BadRequest().body(format!("{:?}", e));
     }
+    // compress pdb data to reduce queue memory usage.
     let compressed_input = Input {
         pdb: super::compress(&input.pdb).expect("compression error"),
         pdb_ligand: match input.pdb_ligand { 
@@ -116,6 +133,7 @@ pub fn create(job_input: web::Json<Input>) -> impl Responder {
         tags: [city::hash64(serde_json::to_string(&compressed_input).unwrap()).to_string()],
         input: compressed_input,
     };
+    // closure to sends data to queue
     let create_job = || {
         let client = reqwest::Client::new();
         let response = client

@@ -27,11 +27,13 @@ pub struct Config {
 }
 
 impl JobInput {
+    /// Save config file
     fn save(&self, config: &Config) -> Result<(), io::Error> {
         self.input.save(self.id, &config)?;
         Ok(())
     }
 
+    /// Call parkvfinder command and get results.
     fn run(&self, config: &Config) -> Result<Output, io::Error> {
         let kvfinder = Command::new(format!("{}/parKVFinder", config.kv_path))
             .current_dir(format!("{}/{}", config.job_path, self.id))
@@ -41,6 +43,7 @@ impl JobInput {
             .expect("failed to execute KVFinder process");
         println!("process exited with: {}", kvfinder);
         if kvfinder.success() {
+            // read results from files and compress
             let kv_pdb_output = super::compress(&fs::read_to_string(format!(
                 "{}/{}/KV_Files/KVFinderWeb/KVFinderWeb.KVFinder.output.pdb",
                 config.job_path, self.id
@@ -70,6 +73,7 @@ impl JobInput {
 }
 
 impl Input {
+    // save files to parkvfinder process them.
     fn save(&self, id: u32, config: &Config) -> Result<(), io::Error> {
         let dir = format!("{}/{}", config.job_path, id);
         match create_dir(&dir) {
@@ -126,8 +130,9 @@ impl Input {
     }
 }
 
+/// Get next job from queue. Returns Error if there is not a job to process.
 pub fn get_job() -> Result<JobInput, reqwest::Error> {
-    // let j: JobInput = reqwest::get("http://0.0.0.0:8023/queue/kvfinder/job")?.json()?;
+    // the queue name "kvfinder" is hardcoded at bin/kv_server.rs
     let j: JobInput = reqwest::get("http://ocypod:8023/queue/kvfinder/job")?.json()?;
     Ok(j)
 }
@@ -140,12 +145,12 @@ pub fn process(job: JobInput, config: &Config) -> Result<Output, io::Error> {
 
 pub fn submit_result(id: u32, output: Output) -> Result<u32, reqwest::Error> {
     let client = reqwest::Client::new();
-    // let url = format!("http://0.0.0.0:8023/job/{}", id);
     let url = format!("http://ocypod:8023/job/{}", id);
-    let data = JobOutput {
+    let  data = JobOutput {
         status: String::from("completed"),
         output,
     };
+    // update job at queue
     let _result = client.patch(url.as_str()).json(&data).send()?;
     Ok(id)
 }

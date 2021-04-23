@@ -108,7 +108,7 @@ class KVClient:
                 print(results)
                 return None
         else:
-            # print(r)
+            print(r)
             return None
     
 
