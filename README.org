@@ -45,7 +45,7 @@ To stop and erase the volumes that store the queue module data and the job folde
 $ docker-compose down --volumes
 #+end_src
 
-The KVFinder-web service uses port 8081 by default. If the local installation was successfully, the link bellow should present a text message like: "KVFinder Web". You can use a browser to test.
+The KVFinder-web service uses port 8081 by default. If the local installation was successfully, the link bellow should present a text message like: "KVFinder Web Service". You can use a browser to test.
 
 [[http://localhost:8081][http://localhost:8081]]
 
