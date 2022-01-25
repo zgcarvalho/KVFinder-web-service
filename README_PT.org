@@ -131,6 +131,30 @@ Exemplo de json de resposta após o /job/ ter sido executado com sucesso
 }
 #+end_src
 
+*** Recuperar um input
+
+*GET /retrieve-input/:id*
+
+- URL: [[http://localhost:8081/retrieve-input/:id][http://localhost:8081/retrieve-input/:id]]
+- Method: GET
+
+Onde *:id* é o id recebido após a submissão do /job/.
+
+Exemplo de resposta:
+
+#+begin_src json
+{
+  "id": "17275205978013541183",
+  "status": "completed",
+  "input": {
+    "pdb": "ATOM   25  OD1 ASP E 323       0.497  12.598  16.506  1.00 40.80           O  \nATOM      26(...)",
+    "pdb_ligand": null,
+    "settings": {"probes": (...)},
+  },
+  "created_at": "2022-01-25T19:32:13.572099997Z",
+}
+#+end_src
+
 
 # ** Cliente integrado ao PyMOL: PyMOL KVFinder-web Tools
 
