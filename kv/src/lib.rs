@@ -7,6 +7,8 @@ mod kv {
     use serde::{Deserialize, Serialize};
     use std::io;
     use std::error::Error;
+    use std::num::ParseFloatError;
+  
 
     #[derive(Serialize, Deserialize, Debug)]
     struct KVParameters {
@@ -267,14 +269,14 @@ mod kv {
                 .filter(|s| s.starts_with("ATOM"))
                 .map(|s| {
                     let (x, y, z) = (
-                        s.get(30..38)?.trim().parse::<f64>().ok()?,
-                        s.get(38..46)?.trim().parse::<f64>().ok()?,
-                        s.get(46..54)?.trim().parse::<f64>().ok()?,
+                        s.get(30..38).unwrap_or("").trim().parse::<f64>()?,
+                        s.get(38..46).unwrap_or("").trim().parse::<f64>()?,
+                        s.get(46..54).unwrap_or("").trim().parse::<f64>()?,
                     );
                     Ok((x, y, z))
                 })
-                .fold(None as Option<PdbBoundaries>, |state, p| {
-                    let p = p?;
+                .fold(None as Option<PdbBoundaries>, |state, p: Result<(f64, f64, f64), ParseFloatError>| {
+                    let p = p.expect("failed parsing pdb coords");
                     match state {
                         None => Some(PdbBoundaries {
                             x_min: p.0,
