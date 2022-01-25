@@ -19,6 +19,14 @@ struct Job {
 }
 
 #[derive(Serialize, Deserialize)]
+struct JobInput {
+    #[serde(default)]
+    id: String,
+    input: Input,
+    created_at: String,
+}
+
+#[derive(Serialize, Deserialize)]
 struct QueueConfig<'a> {
     timeout: &'a str,
     expires_after: &'a str,
@@ -155,3 +163,46 @@ pub async fn create(job_input: web::Json<Input>) -> impl Responder {
         Ok(None) => create_job(), //format!("{} created", tag_id),
     }
 }
+
+
+fn get_input(tag_id: String) -> Result<Option<JobInput>, reqwest::Error> {
+    let queue_id = get_queue_id(&tag_id);
+
+    let get_job_input = |queue_id| {
+        let url = format!("http://ocypod:8023/job/{}?fields=input,created_at", queue_id);
+        // let url = format!("http://localhost:8023/job/{}?fields=input,created_at", queue_id);
+        let mut job_input: JobInput = reqwest::get(url.as_str())?.json()?;
+
+        job_input.id = tag_id;
+        job_input.input.pdb = super::decompress(&job_input.input.pdb).expect("decompression error");
+        job_input.input.pdb_ligand = match job_input.input.pdb_ligand {
+                Some(lig) => Some(super::decompress(&lig).expect("decompression error")),
+                None => None,  
+        };
+
+        Ok(Some(job_input))
+    };
+
+    match queue_id {
+        Err(e) => Err(e),
+        // if queue_id is None (tag_id not found)
+        Ok(None) => return Ok(None),
+        // return job input in json
+        Ok(Some(queue_id)) => return get_job_input(queue_id),
+    }
+
+}
+
+// GET /retrieve-input/{:id}
+// Responds with id, 'created_at' and input: pdb, pdb_ligand, kv_settings
+pub async fn retrieve_input(id: web::Path<String>) -> impl Responder {
+    let tag_id = id.into_inner();
+    let job_input = get_input(tag_id);
+    match job_input {
+        Err(e) => HttpResponse::InternalServerError().body(format!("{:?}", e)),
+        Ok(None) => HttpResponse::NotFound().finish(),
+        Ok(Some(j)) => HttpResponse::Ok().json(j),
+    }
+}
+
+

@@ -23,6 +23,7 @@ async fn main() -> std::io::Result<()> {
             )
             .route("/", web::get().to(kv::webserver::hello))
             .route("/{id}", web::get().to(kv::webserver::ask))
+            .route("/retrieve-input/{id}", web::get().to(kv::webserver::retrieve_input))
             .route("/create", web::post().to(kv::webserver::create))
     })
     .bind("0.0.0.0:8081")
