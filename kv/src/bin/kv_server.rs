@@ -16,9 +16,9 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .data(
+            .app_data(
                 web::JsonConfig::default()
-                    .limit(1_000_000)
+                    .limit(5_000_000)
                     .error_handler(json_error_handler),
             )
             .route("/", web::get().to(kv::webserver::hello))

@@ -8,6 +8,8 @@ mod kv {
     use std::io;
     use std::error::Error;
     use std::num::ParseFloatError;
+    // use base64::engine::general_purpose::STANDARD;
+    use base64::{Engine as _, engine::general_purpose};
   
 
     #[derive(Serialize, Deserialize, Debug)]
@@ -170,12 +172,12 @@ mod kv {
     // base64 representation increases binary size in 1/3 (string size = 4/3 * binary size)
     // the combination results in a compression ratio of ~3x
     fn compress(s: &String) -> Result<String, io::Error> {
-        let v = zstd::block::compress(s.as_bytes(), 1)?;
-        Ok(base64::encode(&v))
+        let v = zstd::bulk::compress(s.as_bytes(), 1)?;
+        Ok(general_purpose::STANDARD.encode(&v))
     }
 
     fn decompress(b64: &String) -> Result<String, Box<dyn Error>> {
-        let s = base64::decode(&b64)?;
+        let s =  general_purpose::STANDARD.decode(&b64)?;
         Ok(String::from_utf8(zstd::stream::decode_all(s.as_slice())?)?)
     }
 
