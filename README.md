@@ -1,5 +1,8 @@
 # KVFinder-web service
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/LBC-LNBio/KVFinder-web-service?color=informational)
+![GitHub](https://img.shields.io/github/license/LBC-LNBio/KVFinder-web-service)
+
 Welcome to the KVFinder-web service, this page was built to help you get started with our cavity detection web service.
 
 ## KVFinder-web
@@ -38,14 +41,14 @@ After the docker-compose installation and clone of this repository. To start KVF
 docker-compose up
 ```
 
-The KVFinder-web service uses port 8081 by default. If the local installation was successfully, “KVFinder Web Service” message will be shown at <http://localhost:8081> and Job queue information can be accessed at <http://localhost:8023/info>.
+The KVFinder-web service uses port 8081 by default. If the local installation was successfully, “KVFinder-web service” message will be shown at [http://localhost:8081](http://localhost:8081) and Job queue information can be accessed at [http://localhost:8023/info](http://localhost:8023/info).
 
 #### API
 
 To create a job:
 
 - POST /create
-  - URL: <http://localthost:8081/create>
+  - URL: [http://localthost:8081/create](http://localthost:8081/create)
   - Method: POST
   - Media type: 'application/json'
 
@@ -97,7 +100,7 @@ To create a job:
 To request a job:
 
 - GET /:id
-  - URL: <http://localhost:8081/:id>
+  - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
   - Method: GET
 
 Where *:id* is the job id received from the KVFinder-web service as submission response.
@@ -121,7 +124,7 @@ Where *:id* is the job id received from the KVFinder-web service as submission r
 To retrieve a job input:
 
 - GET /retrieve-input/:id*
-  - URL: <http://localhost:8081/retrieve-input/:id>
+  - URL: [http://localhost:8081/retrieve-input/:id](http://localhost:8081/retrieve-input/:id)
   - Method: GET
 
 Where *:id*  is the job id received from the server as submission response.
@@ -146,11 +149,11 @@ This client provides a template in Python that can be run to access our web serv
 
 ### KVFinder-web portal
 
-The KVFinder-web portal, written in R and Shiny, is a graphical web application for detecting and characterizing biomolecular cavities at a KVFinder-web service, natively configured in our publicly available web service (<http://kvfinder-web.cnpem.br>).
+The KVFinder-web portal, written in R and Shiny, is a graphical web application for detecting and characterizing biomolecular cavities at a KVFinder-web service, natively configured in our publicly available web service ([http://kvfinder-web.cnpem.br](http://kvfinder-web.cnpem.br)).
 
 ### PyMOL KVFinder-web Tools
 
-The PyMOL KVFinder-web Tools, written in Python and Qt, is a PyMOL v2.x plugin for detecting and characterizing biomolecular cavities at a KVFinder-web service with functionalities similar to [PyMOL parKVFinder Tools](https://github.com/LBC-LNBio/parKVFinder/wiki/parKVFinder-Tutorial#pymol2-parkvfinder-tools), which is natively configured to our publicly available web service (<http://kvfinder-web.cnpem.br>).
+The PyMOL KVFinder-web Tools, written in Python and Qt, is a PyMOL v2.x plugin for detecting and characterizing biomolecular cavities at a KVFinder-web service with functionalities similar to [PyMOL parKVFinder Tools](https://github.com/LBC-LNBio/parKVFinder/wiki/parKVFinder-Tutorial#pymol2-parkvfinder-tools), which is natively configured to our publicly available web service ([http://kvfinder-web.cnpem.br](http://kvfinder-web.cnpem.br)).
 
 ## Funding
 
