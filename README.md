@@ -140,7 +140,7 @@ Where *:id*  is the job id received from the server as submission response.
 
 ### HTTP Client
 
-In this repository, we provide a simple Python HTTP client (<https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py>) to interact with KVFinder-web service via `requests` package.
+In this repository, we provide a simple [Python HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py) to interact with KVFinder-web service via `requests` package.
 
 This client provides a template in Python that can be run to access our web service and parse the output data.
 
