@@ -10,7 +10,7 @@ The KVFinder-web application has two independent components:
 
 - a RESTful web service: [KVFinder-web service](https://github.com/LBC-LNBio/KVFinder-web-service);
 - clients, that are:
-  - [HTTP Client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py)
+  - [HTTP Client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py): a Python script;
   - [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal): a graphical web portal;
   - [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools): a graphical PyMOL plugin;
 
@@ -97,7 +97,7 @@ To create a job:
 To request a job:
 
 - GET /:id
-  - URL: <http://localhost:8081/:id]>
+  - URL: <http://localhost:8081/:id>
   - Method: GET
 
 Where *:id* is the job id received from the KVFinder-web service as submission response.
@@ -140,7 +140,9 @@ Where *:id*  is the job id received from the server as submission response.
 
 ## HTTP Client
 
-In this repository, we provide a simple Python client (<https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py>) to interact with KVFinder-web service via `requests` package.
+In this repository, we provide a simple Python HTTP client (<https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py>) to interact with KVFinder-web service via `requests` package.
+
+This client provides a template in Python that can be run to access our web service and parse the output data.
 
 ## KVFinder-web portal
 
