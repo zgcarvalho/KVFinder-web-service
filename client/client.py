@@ -37,7 +37,6 @@ class KVJob:
 
     def _add_pdb(self, pdb_fn: str, is_ligand: bool=False):
         with open(pdb_fn) as f:
-            # pdb = f.readlines()
             pdb = f.read()
         if is_ligand:
             self.input["pdb_ligand"] = pdb
@@ -85,6 +84,7 @@ class KVClient:
         if self._submit(kv_job):
             while kv_job.output == None:
                 kv_job.output = self._get_results(kv_job)
+                print(kv_job)
                 sleep(2)
             print("OK")
 
@@ -112,10 +112,25 @@ class KVClient:
             return None
     
 
+import logging
+
+# These two lines enable debugging at httplib level (requests->urllib3->http.client)
+# You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
+# The only thing missing will be the response.body which is not logged.
+import http.client as http_client
+http_client.HTTPConnection.debuglevel = 1
+
+# You must initialize logging, otherwise you'll not see debug output.
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
 if __name__ == "__main__":
     # create and configure a KVClient with server url and port (default 80)
     # local server 
-    kv = KVClient("http://localhost", "8081")
+    kv = KVClient("http://108.61.215.105", "8081")
     # remote server
     # kv = KVClient("http://parkvfinder.cnpem.br", "8081")
     # create a job using a pdb file with default configuration (code to configure is not implemented)
