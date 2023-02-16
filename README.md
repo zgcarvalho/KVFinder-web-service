@@ -16,7 +16,7 @@ The KVFinder-web application has two independent components:
 
 The full KVFinder-web documentation can be found here: ([http://lbc-lnbio.github.io/KVFinder-web](http://lbc-lnbio.github.io/KVFinder-web)).
 
-## KVFinder-web service
+### KVFinder-web service
 
 KVFinder-web service is a RESTful web service that runs [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
 
@@ -24,7 +24,7 @@ We provide a publicly available KVFinder-web service ([https://kvfinder-web.cnpe
 
 Our public KVFinder-web service is hosted in a Cloud environment, that has some limitations compared to parKVFinder standalone version, which are stated on the documentation. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
 
-### Local installation
+#### Local installation
 
 To run this web service in Linux distributions, it is necessary to install docker-compose and its dependencies. To install it:
 
@@ -40,7 +40,7 @@ docker-compose up
 
 The KVFinder-web service uses port 8081 by default. If the local installation was successfully, “KVFinder Web Service” message will be shown at <http://localhost:8081> and Job queue information can be accessed at <http://localhost:8023/info>.
 
-### API
+#### API
 
 To create a job:
 
@@ -138,17 +138,17 @@ Where *:id*  is the job id received from the server as submission response.
 }
 ```
 
-## HTTP Client
+### HTTP Client
 
 In this repository, we provide a simple Python HTTP client (<https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py>) to interact with KVFinder-web service via `requests` package.
 
 This client provides a template in Python that can be run to access our web service and parse the output data.
 
-## KVFinder-web portal
+### KVFinder-web portal
 
 The KVFinder-web portal, written in R and Shiny, is a graphical web application for detecting and characterizing biomolecular cavities at a KVFinder-web service, natively configured in our publicly available web service (<http://kvfinder-web.cnpem.br>).
 
-## PyMOL KVFinder-web Tools
+### PyMOL KVFinder-web Tools
 
 The PyMOL KVFinder-web Tools, written in Python and Qt, is a PyMOL v2.x plugin for detecting and characterizing biomolecular cavities at a KVFinder-web service with functionalities similar to [PyMOL parKVFinder Tools](https://github.com/LBC-LNBio/parKVFinder/wiki/parKVFinder-Tutorial#pymol2-parkvfinder-tools), which is natively configured to our publicly available web service (<http://kvfinder-web.cnpem.br>).
 
