@@ -13,11 +13,11 @@ The KVFinder-web application has two independent components:
 
 - a RESTful web service: [KVFinder-web service](https://github.com/LBC-LNBio/KVFinder-web-service);
 - clients, that are:
-  - [HTTP Client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py): a Python script;
+  - [HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py): an example of Python HTTP client;
   - [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal): a graphical web portal;
   - [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools): a graphical PyMOL plugin;
 
-The full KVFinder-web documentation can be found here: ([http://lbc-lnbio.github.io/KVFinder-web](http://lbc-lnbio.github.io/KVFinder-web)).
+The full KVFinder-web documentation can be found here: <http://lbc-lnbio.github.io/KVFinder-web>.
 
 ### KVFinder-web service
 
@@ -143,9 +143,7 @@ Where *:id*  is the job id received from the server as submission response.
 
 ### HTTP Client
 
-In this repository, we provide a simple [Python HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py) to interact with KVFinder-web service via `requests` package.
-
-This client provides a template in Python that can be run to access our web service and parse the output data.
+In this repository, we provide a simple [Python HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py) to interact with KVFinder-web service via `requests` package. This client provides an example of a template in Python that can be run to access our web service and parse the output data.
 
 ### KVFinder-web portal
 
@@ -162,3 +160,5 @@ KVFinder-web interface was supported by Fundação de Amparo à Pesquisa do Esta
 ## License
 
 The software is licensed under the terms of the Apache-2.0 License and is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache-2.0 License for more details.
+
+---

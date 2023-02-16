@@ -1,4 +1,4 @@
-mod kv {
+mod kvweb {
     pub mod worker;
     pub mod webserver;
 
@@ -323,5 +323,5 @@ mod kv {
     }
 }
 
-pub use crate::kv::webserver;
-pub use crate::kv::worker;
+pub use crate::kvweb::webserver;
+pub use crate::kvweb::worker;

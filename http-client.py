@@ -1,14 +1,14 @@
 import json
 from typing import Optional, Any, Dict
 import requests
-import zlib
 from time import sleep
 
+
 class KVJob:
-    def __init__(self, path_protein_pdb: str, path_ligand_pdb: Optional[str]=None):
+    def __init__(self, path_protein_pdb: str, path_ligand_pdb: Optional[str] = None):
         self.id: Optional[str] = None
         self.input: Optional[Dict[str, Any]] = {}
-        self.output: Optional[Dict[str, Any]] = None 
+        self.output: Optional[Dict[str, Any]] = None
         self._add_pdb(path_protein_pdb)
         if path_ligand_pdb != None:
             self._add_pdb(path_ligand_pdb, is_ligand=True)
@@ -35,7 +35,7 @@ class KVJob:
         else:
             return self.output["output"]["log"]
 
-    def _add_pdb(self, pdb_fn: str, is_ligand: bool=False):
+    def _add_pdb(self, pdb_fn: str, is_ligand: bool = False):
         with open(pdb_fn) as f:
             pdb = f.read()
         if is_ligand:
@@ -46,37 +46,38 @@ class KVJob:
     def _default_settings(self):
         self.input["settings"] = {}
         self.input["settings"]["modes"] = {
-            "whole_protein_mode" : True,
-            "box_mode" : False,
-            "resolution_mode" : "Low",
-            "surface_mode" : True,
-            "kvp_mode" : False,
-            "ligand_mode" : False,
+            "whole_protein_mode": True,
+            "box_mode": False,
+            "resolution_mode": "Low",
+            "surface_mode": True,
+            "kvp_mode": False,
+            "ligand_mode": False,
         }
         self.input["settings"]["step_size"] = {"step_size": 0.0}
         self.input["settings"]["probes"] = {
-            "probe_in" : 1.4,
-            "probe_out" : 4.0,
+            "probe_in": 1.4,
+            "probe_out": 4.0,
         }
         self.input["settings"]["cutoffs"] = {
-            "volume_cutoff" : 5.0,
-            "ligand_cutoff" : 5.0,
-            "removal_distance" : 0.0,
+            "volume_cutoff": 5.0,
+            "ligand_cutoff": 5.0,
+            "removal_distance": 0.0,
         }
         self.input["settings"]["visiblebox"] = {
-            "p1" : {"x" : 0.00, "y" : 0.00, "z" : 0.00},
-            "p2" : {"x" : 0.00, "y" : 0.00, "z" : 0.00},
-            "p3" : {"x" : 0.00, "y" : 0.00, "z" : 0.00},
-            "p4" : {"x" : 0.00, "y" : 0.00, "z" : 0.00},
+            "p1": {"x": 0.00, "y": 0.00, "z": 0.00},
+            "p2": {"x": 0.00, "y": 0.00, "z": 0.00},
+            "p3": {"x": 0.00, "y": 0.00, "z": 0.00},
+            "p4": {"x": 0.00, "y": 0.00, "z": 0.00},
         }
         self.input["settings"]["internalbox"] = {
-            "p1" : {"x" : -4.00, "y" : -4.00, "z" : -4.00},
-            "p2" : {"x" : 4.00, "y" : -4.00, "z" : -4.00},
-            "p3" : {"x" : -4.00, "y" : 4.00, "z" : -4.00},
-            "p4" : {"x" : -4.00, "y" : -4.00, "z" : 4.00},
+            "p1": {"x": -4.00, "y": -4.00, "z": -4.00},
+            "p2": {"x": 4.00, "y": -4.00, "z": -4.00},
+            "p3": {"x": -4.00, "y": 4.00, "z": -4.00},
+            "p4": {"x": -4.00, "y": -4.00, "z": 4.00},
         }
 
-class KVClient:
+
+class KVHTTPClient:
     def __init__(self, server: str, port="80"):
         self.server = f"{server}:{port}"
 
@@ -89,9 +90,9 @@ class KVClient:
             print("OK")
 
     def _submit(self, kv_job) -> bool:
-        r = requests.post(self.server + '/create', json=kv_job.input)
+        r = requests.post(self.server + "/create", json=kv_job.input)
         if r.ok:
-            kv_job.id = r.json()['id']
+            kv_job.id = r.json()["id"]
             return True
         else:
             print("Debug:", r)
@@ -99,10 +100,10 @@ class KVClient:
             return False
 
     def _get_results(self, kv_job) -> Optional[Dict[str, Any]]:
-        r = requests.get(self.server + '/' + kv_job.id)
+        r = requests.get(self.server + "/" + kv_job.id)
         if r.ok:
             results = r.json()
-            if results['status'] == 'completed':
+            if results["status"] == "completed":
                 return results
             else:
                 print(results)
@@ -110,29 +111,14 @@ class KVClient:
         else:
             print(r)
             return None
-    
 
-import logging
-
-# These two lines enable debugging at httplib level (requests->urllib3->http.client)
-# You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
-# The only thing missing will be the response.body which is not logged.
-import http.client as http_client
-http_client.HTTPConnection.debuglevel = 1
-
-# You must initialize logging, otherwise you'll not see debug output.
-logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
-requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.DEBUG)
-requests_log.propagate = True
 
 if __name__ == "__main__":
     # create and configure a KVClient with server url and port (default 80)
-    # local server 
-    kv = KVClient("http://108.61.215.105", "8081")
+    # local server
+    kv = KVHTTPClient("http://localhost", "8081")
     # remote server
-    # kv = KVClient("http://parkvfinder.cnpem.br", "8081")
+    # kv = KVHTTPClient("http://kvfinder-web.cnpem.br", "8081")
     # create a job using a pdb file with default configuration (code to configure is not implemented)
     job = KVJob("examples/1FMO.pdb")
     # send job to server and wait until completion
