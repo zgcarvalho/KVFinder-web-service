@@ -53,7 +53,7 @@ class KVJob:
             "whole_protein_mode": True,
             "box_mode": False,
             "resolution_mode": "Low",
-            "surface_mode": False,
+            "surface_mode": True,
             "kvp_mode": False,
             "ligand_mode": False,
         }
