@@ -3,6 +3,7 @@ from typing import Optional, Any, Dict
 import requests
 from time import sleep
 
+__all__= ["KVJob", "KVHTTPClient"]
 
 class KVJob:
     def __init__(self, path_protein_pdb: str, path_ligand_pdb: Optional[str] = None):
@@ -61,7 +62,7 @@ class KVJob:
         self.input["settings"]["cutoffs"] = {
             "volume_cutoff": 5.0,
             "ligand_cutoff": 5.0,
-            "removal_distance": 0.0,
+            "removal_distance": 2.4,
         }
         self.input["settings"]["visiblebox"] = {
             "p1": {"x": 0.00, "y": 0.00, "z": 0.00},
@@ -85,7 +86,6 @@ class KVHTTPClient:
         if self._submit(kv_job):
             while kv_job.output == None:
                 kv_job.output = self._get_results(kv_job)
-                print(kv_job)
                 sleep(2)
             print("OK")
 
@@ -114,7 +114,7 @@ class KVHTTPClient:
 
 
 if __name__ == "__main__":
-    # create and configure a KVClient with server url and port (default 80)
+    # create and configure a KVHTTPClient with server url and port (default 80)
     # local server
     kv = KVHTTPClient("http://localhost", "8081")
     # remote server
