@@ -13,7 +13,7 @@ The KVFinder-web application has two independent components:
 
 - a RESTful web service: [KVFinder-web service](https://github.com/LBC-LNBio/KVFinder-web-service);
 - clients, that are:
-  - [HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http-client.py): an example of Python HTTP client;
+  - [HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http_client.py): an example of Python HTTP client;
   - [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal): a graphical web portal;
   - [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools): a graphical PyMOL plugin;
 
