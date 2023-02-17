@@ -1,9 +1,12 @@
 import json
-from typing import Optional, Any, Dict
-import requests
 from time import sleep
+from typing import Any, Dict, Optional
 
-__all__= ["KVJob", "KVHTTPClient"]
+import requests
+import toml
+
+__all__ = ["KVJob", "KVHTTPClient"]
+
 
 class KVJob:
     def __init__(self, path_protein_pdb: str, path_ligand_pdb: Optional[str] = None):
@@ -16,7 +19,7 @@ class KVJob:
         self._default_settings()
 
     @property
-    def kv_pdb(self):
+    def cavity(self):
         if self.output == None:
             return None
         else:
@@ -27,7 +30,7 @@ class KVJob:
         if self.output == None:
             return None
         else:
-            return self.output["output"]["report"]
+            return toml.loads(self.output["output"]["report"])
 
     @property
     def log(self):
@@ -50,7 +53,7 @@ class KVJob:
             "whole_protein_mode": True,
             "box_mode": False,
             "resolution_mode": "Low",
-            "surface_mode": True,
+            "surface_mode": False,
             "kvp_mode": False,
             "ligand_mode": False,
         }
@@ -77,6 +80,17 @@ class KVJob:
             "p4": {"x": -4.00, "y": -4.00, "z": 4.00},
         }
 
+    def save(
+        self, cavity: str = "cavity.pdb", report: str = "report.toml", log="job.log"
+    ):
+        if self.output != None:
+            with open(cavity, "w") as f:
+                f.write(self.cavity)
+            with open(report, "w") as f:
+                toml.dump(self.report, f)
+            with open(log, "w") as f:
+                f.write(self.log)
+
 
 class KVHTTPClient:
     def __init__(self, server: str, port="80"):
@@ -87,7 +101,7 @@ class KVHTTPClient:
             while kv_job.output == None:
                 kv_job.output = self._get_results(kv_job)
                 sleep(2)
-            print("OK")
+            print("Job completed!")
 
     def _submit(self, kv_job) -> bool:
         r = requests.post(self.server + "/create", json=kv_job.input)
@@ -114,14 +128,17 @@ class KVHTTPClient:
 
 
 if __name__ == "__main__":
-    # create and configure a KVHTTPClient with server url and port (default 80)
-    # local server
+    # Create and configure a KVHTTPClient with server url and port (default 80)
+    # Local KVFinder-web service
     kv = KVHTTPClient("http://localhost", "8081")
-    # remote server
+    # Publicly KVFinder-web service
     # kv = KVHTTPClient("http://kvfinder-web.cnpem.br", "8081")
-    # create a job using a pdb file with default configuration (code to configure is not implemented)
+
+    # Create a job using a pdb file with default configuration (code to configure is not implemented)
     job = KVJob("examples/1FMO.pdb")
-    # send job to server and wait until completion
+
+    # Send job to KVFinder-web service and wait until completion
     kv.run(job)
-    # print job results
+
+    # After completion, print incoming JSON
     print(json.dumps(job.output, indent=2))
