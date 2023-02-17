@@ -48,9 +48,11 @@ The KVFinder-web service uses port 8081 by default. If the local installation wa
 To create a job:
 
 - POST /create
-  - URL: [http://localthost:8081/create](http://localthost:8081/create)
   - Method: POST
   - Media type: 'application/json'
+  - URL: [http://localthost:8081/create](http://localthost:8081/create)
+
+Example of job request:
 
 ```json
 {
@@ -100,10 +102,12 @@ To create a job:
 To request a job:
 
 - GET /:id
-  - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
   - Method: GET
-
+  - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
+  
 Where *:id* is the job id received from the KVFinder-web service as submission response.
+
+Example of response obtained for a *job* with status "completed":
 
 ```json
 {
@@ -124,10 +128,12 @@ Where *:id* is the job id received from the KVFinder-web service as submission r
 To retrieve a job input:
 
 - GET /retrieve-input/:id*
-  - URL: [http://localhost:8081/retrieve-input/:id](http://localhost:8081/retrieve-input/:id)
   - Method: GET
-
+  - URL: [http://localhost:8081/retrieve-input/:id](http://localhost:8081/retrieve-input/:id)
+  
 Where *:id*  is the job id received from the server as submission response.
+
+Example of response obtained for a requested *job* input:
 
 ```json
 {
