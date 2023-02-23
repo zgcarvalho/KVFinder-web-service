@@ -22,7 +22,7 @@ services:
   ocypod:
     image: davechallis/ocypod:latest
     volumes:
-      - ./queue/ocypod.toml:/etc/ocypod.toml:ro
+      - ./queue/ocypod.toml:/etc/ocypod.toml:z
     depends_on:
       - "ocypod-redis"
     command: /etc/ocypod.toml

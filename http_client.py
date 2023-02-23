@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional
 import requests
 import toml
 
-__all__ = ["KVJob", "KVHTTPClient"]
+__all__ = ["KVJob", "KVClient"]
 
 
 class KVJob:
@@ -92,9 +92,9 @@ class KVJob:
                 f.write(self.log)
 
 
-class KVHTTPClient:
-    def __init__(self, server: str, port="80"):
-        self.server = f"{server}:{port}"
+class KVClient:
+    def __init__(self, host: str, path=''):
+        self.server = f'{host}{path}'
 
     def run(self, kv_job: KVJob):
         if self._submit(kv_job):
@@ -104,7 +104,7 @@ class KVHTTPClient:
             print("Job completed!")
 
     def _submit(self, kv_job) -> bool:
-        r = requests.post(self.server + "/create", json=kv_job.input)
+        r = requests.post(f'{self.server}/create', json=kv_job.input)
         if r.ok:
             kv_job.id = r.json()["id"]
             return True
@@ -114,7 +114,7 @@ class KVHTTPClient:
             return False
 
     def _get_results(self, kv_job) -> Optional[Dict[str, Any]]:
-        r = requests.get(self.server + "/" + kv_job.id)
+        r = requests.get(f'{self.server}/{kv_job.id}')
         if r.ok:
             results = r.json()
             if results["status"] == "completed":
@@ -128,11 +128,12 @@ class KVHTTPClient:
 
 
 if __name__ == "__main__":
-    # Create and configure a KVHTTPClient with server url and port (default 80)
+    # Create and configure a KVClient with server url and port (default 80)
     # Local KVFinder-web service
-    kv = KVHTTPClient("http://localhost", "8081")
-    # Publicly KVFinder-web service
-    # kv = KVHTTPClient("http://kvfinder-web.cnpem.br", "8081")
+    kv = KVClient("http://localhost:8081")
+    # Publicly KVFinder-web service using http or https
+    # kv = KVClient("http://kvfinder-web.cnpem.br", path='/api')
+    # kv = KVClient("https://kvfinder-web.cnpem.br", path='/api')
 
     # Create a job using a pdb file with default configuration (code to configure is not implemented)
     job = KVJob("examples/1FMO.pdb")
