@@ -20,9 +20,9 @@ filtered by the "bug" label and verify the issue you're about to submit isn't a 
 
 ### Setup
 <!-- Please complete the following information. -->
- - OS: [e.g. Linux/MacOS/Windows]
- - PyMOL Version [e.g. v2.x]
- - Python Version [e.g. v3.x]
+- OS: [e.g. Linux/MacOS/Windows]
+- Docker: [e.g. 20.10.12]
+- Rust: [e.g. 1.67.1]
 
 ### Steps to reproduce
 

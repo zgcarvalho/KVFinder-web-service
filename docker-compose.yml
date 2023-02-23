@@ -2,30 +2,28 @@ version: '3'
 
 services:
   kv-server:
-    build: 
-      context: ./kv
+    build:
+      context: ./web-service
       dockerfile: Dockerfile-server
-    depends_on: 
-      - "ocypod" 
+    depends_on:
+      - "ocypod"
     ports:
       - 8081:8081
 
-
   kv-worker:
-    build: 
-        context: ./kv
-        dockerfile: Dockerfile-worker
-    depends_on: 
-      - "ocypod"  
+    build:
+      context: ./web-service
+      dockerfile: Dockerfile-worker
+    depends_on:
+      - "ocypod"
     volumes:
       - kvfinder-jobs:/jobs
-
 
   ocypod:
     image: davechallis/ocypod:latest
     volumes:
       - ./queue/ocypod.toml:/etc/ocypod.toml:ro
-    depends_on: 
+    depends_on:
       - "ocypod-redis"
     command: /etc/ocypod.toml
     ports:

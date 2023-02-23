@@ -13,7 +13,7 @@ assignees: ''
 
 <!-- What is the problem and solution you're proposing? This content sets the overall vision for the feature. -->
 
-### Problem to solve 
+### Problem to solve
 
 <!-- What problem do we solve? Try to define the who/what/why of the opportunity as a user story. For example, "As a (who), I want (what), so I can (why/value)." -->
 
