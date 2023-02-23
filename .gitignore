@@ -1,2 +1,5 @@
 .vscode/
 kv/target/
+certs/
+kv/Cargo.lock
+*__pycache__*

@@ -78,8 +78,9 @@ class KVJob:
         }
 
 class KVClient:
-    def __init__(self, server: str, port="80"):
-        self.server = f"{server}:{port}"
+    def __init__(self, host: str, path=''):
+        self.server = f'{host}{path}'
+        print(self.server)
 
     def run(self, kv_job: KVJob):
         if self._submit(kv_job):
@@ -89,7 +90,7 @@ class KVClient:
             print("OK")
 
     def _submit(self, kv_job) -> bool:
-        r = requests.post(self.server + '/create', json=kv_job.input)
+        r = requests.post(f'{self.server}/create', json=kv_job.input)
         if r.ok:
             kv_job.id = r.json()['id']
             return True
@@ -99,7 +100,7 @@ class KVClient:
             return False
 
     def _get_results(self, kv_job) -> Optional[Dict[str, Any]]:
-        r = requests.get(self.server + '/' + kv_job.id)
+        r = requests.get(f'{self.server}/{kv_job.id}')
         if r.ok:
             results = r.json()
             if results['status'] == 'completed':
@@ -115,9 +116,10 @@ class KVClient:
 if __name__ == "__main__":
     # create and configure a KVClient with server url and port (default 80)
     # local server 
-    kv = KVClient("http://localhost", "8081")
+    kv = KVClient("http://localhost:8081")
     # remote server
-    # kv = KVClient("http://parkvfinder.cnpem.br", "8081")
+    # kv = KVClient('http://kvfinder-web.cnpem.br', path='/api')
+    # kv = KVClient('https://kvfinder-web.cnpem.br', path='/api') # or using https
     # create a job using a pdb file with default configuration (code to configure is not implemented)
     job = KVJob("examples/1FMO.pdb")
     # send job to server and wait until completion
