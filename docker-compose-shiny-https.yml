@@ -3,7 +3,7 @@ version: '3'
 services:
   kv-server:
     build: 
-      context: ./kv
+      context: ./web-service
       dockerfile: Dockerfile-server
     depends_on: 
       - "ocypod" 
@@ -13,7 +13,7 @@ services:
 
   kv-worker:
     build: 
-        context: ./kv
+        context: ./web-service
         dockerfile: Dockerfile-worker
     depends_on: 
       - "ocypod"  
