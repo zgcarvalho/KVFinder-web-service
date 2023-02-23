@@ -13,8 +13,8 @@ services:
 
   kv-worker:
     build: 
-        context: ./web-service
-        dockerfile: Dockerfile-worker
+      context: ./web-service
+      dockerfile: Dockerfile-worker
     depends_on: 
       - "ocypod"  
     volumes:
@@ -49,6 +49,8 @@ services:
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
+    depends_on:
+      - "kvkvshiny"
     ports:
       - 80:80
       - 443:443
