@@ -17,7 +17,7 @@ The KVFinder-web application has two independent components:
   - [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal): a graphical web portal;
   - [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools): a graphical PyMOL plugin;
 
-The full KVFinder-web documentation can be found here: <http://lbc-lnbio.github.io/KVFinder-web>.
+The full KVFinder-web documentation can be found here: [http://lbc-lnbio.github.io/KVFinder-web](http://lbc-lnbio.github.io/KVFinder-web).
 
 ### KVFinder-web service
 
@@ -104,7 +104,7 @@ To request a job:
 - GET /:id
   - Method: GET
   - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
-  
+
 Where *:id* is the job id received from the KVFinder-web service as submission response.
 
 Example of response obtained for a *job* with status "completed":
@@ -130,7 +130,7 @@ To retrieve a job input:
 - GET /retrieve-input/:id*
   - Method: GET
   - URL: [http://localhost:8081/retrieve-input/:id](http://localhost:8081/retrieve-input/:id)
-  
+
 Where *:id*  is the job id received from the server as submission response.
 
 Example of response obtained for a requested *job* input:
