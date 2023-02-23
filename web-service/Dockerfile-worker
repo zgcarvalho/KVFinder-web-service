@@ -4,13 +4,11 @@ COPY . .
 RUN apt-get update && apt-get install -y libssl-dev && rm -rf /var/lib/apt/lists/*
 RUN cargo install --path . --bin kv_worker
 
-
 FROM debian:bullseye-slim as parkvfinder-builder
 WORKDIR /usr/src/
 RUN apt-get update && apt-get install -y git gcc make && rm -rf /var/lib/apt/lists/* 
-RUN git clone https://github.com/LBC-LNBio/parKVFinder --branch v1.1.2
+RUN git clone https://github.com/LBC-LNBio/parKVFinder --branch v1.1.4
 RUN cd parKVFinder && make
-
 
 FROM debian:bullseye-slim
 RUN apt-get update && apt-get install -y libgomp1 libssl-dev && rm -rf /var/lib/apt/lists/* 
@@ -18,6 +16,4 @@ COPY --from=worker-builder /usr/local/cargo/bin/kv_worker /usr/local/bin/kv_work
 COPY --from=parkvfinder-builder /usr/src/parKVFinder/parKVFinder /usr/local/parKVFinder/parKVFinder
 COPY --from=parkvfinder-builder /usr/src/parKVFinder/dictionary /usr/local/parKVFinder/dictionary
 ENV KVFinder_PATH=/usr/local/parKVFinder 
-CMD ["kv_worker", "/usr/local/parKVFinder/", "/jobs"]
-
-
+CMD ["kv_worker", "/usr/local/parKVFinder", "/jobs"]

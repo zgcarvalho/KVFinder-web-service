@@ -35,7 +35,7 @@ struct QueueConfig<'a> {
 
 // GET /
 pub async fn hello() -> impl Responder {
-    "KVFinder Web Service"
+    "KVFinder-web service"
 }
 
 pub fn create_ocypod_queue(
