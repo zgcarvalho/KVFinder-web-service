@@ -130,10 +130,10 @@ class KVClient:
 if __name__ == "__main__":
     # Create and configure a KVClient with server url and port (default 80)
     # Local KVFinder-web service
-    kv = KVClient("http://localhost:8081")
+    # kv = KVClient("http://localhost:8081")
     # Publicly KVFinder-web service using http or https
     # kv = KVClient("http://kvfinder-web.cnpem.br", path='/api')
-    # kv = KVClient("https://kvfinder-web.cnpem.br", path='/api')
+    kv = KVClient("https://kvfinder-web.cnpem.br", path='/api')
 
     # Create a job using a pdb file with default configuration (code to configure is not implemented)
     job = KVJob("examples/1FMO.pdb")

@@ -56,10 +56,10 @@ services:
       - 443:443
 
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./Caddyfile:/etc/caddy/Caddyfile:z
       # - $PWD/certs/.well-known:/usr/share/caddy/.well-known
-      - /etc/ssl/certs:/etc/ssl/certs
-      - /etc/ssl/private:/etc/ssl/private
+      - /etc/ssl/certs:/etc/ssl/certs:z
+      - /etc/ssl/private:/etc/ssl/private:z
       - caddy_data:/data
       - caddy_config:/config
 
