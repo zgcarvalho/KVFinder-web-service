@@ -44,7 +44,7 @@ services:
     depends_on:
       - "kv-server"
     ports:
-      - 80:3838
+      - 8080:3838
 
 volumes:
   ocypod-redis-data:
