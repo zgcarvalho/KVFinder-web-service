@@ -56,12 +56,7 @@ Example of job request:
 
 ```json
 {
-  "pdb": [
-    "MODEL        1\n",
-    "ATOM      1  N   GLU E  13      -6.693 -15.642 -14.858  1.00100.00           N  \n",
-    (...)
-   "END\n"
-  ],
+  "pdb": "MODEL        1\nATOM      1  N   GLU E  13      -6.693 -15.642 -14.858  1.00100.00           N  \n(...)\nEND\n",
   "settings": {
     "modes": {
       "whole_protein_mode": true,
