@@ -23,7 +23,7 @@ The full KVFinder-web documentation can be found here: [http://lbc-lnbio.github.
 
 ### KVFinder-web service
 
-KVFinder-web service is a RESTful web service that runs an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
+KVFinder-web service is a RESTful web service that runs an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) to detect and characterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
 
 We provide a publicly available KVFinder-web service ([https://kvfinder-web.cnpem.br](https://kvfinder-web.cnpem.br)), with [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal) as the graphical web interface.
 
