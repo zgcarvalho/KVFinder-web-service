@@ -7,25 +7,27 @@ Welcome to the KVFinder-web service, this page was built to help you get started
 
 ## KVFinder-web
 
-KVFinder-web is an open-source web-based application of [parKVFinder](https://github.com/LBC-LNBio) software for cavity detection and spatial characterization of any type of biomolecular structure.
+KVFinder-web is an open-source web-based application of an updated version of [parKVFinder](https://github.com/LBC-LNBio) software (v1.2.0) cavity detection and characterization of any type of biomolecular structure. The characterization includes spatial, depth, constitutional and hydropathy characterization.
 
-The KVFinder-web application has two independent components:
+The KVFinder-web has two independent components:
 
 - a RESTful web service: [KVFinder-web service](https://github.com/LBC-LNBio/KVFinder-web-service);
-- clients, that are:
-  - [HTTP client](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http_client.py): an example of Python HTTP client;
-  - [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal): a graphical web portal;
-  - [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools): a graphical PyMOL plugin;
+- a graphical web portal: [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal)
 
-The full KVFinder-web documentation can be found here: <http://lbc-lnbio.github.io/KVFinder-web>.
+To broaden the range of possibilities for user interaction, we also provide additional client-side applications, that are:
+
+- a graphical PyMOL plugin: [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools);
+- an example of a Python HTTP client: [http-client.py](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http_client.py)
+
+The full KVFinder-web documentation can be found here: [http://lbc-lnbio.github.io/KVFinder-web](http://lbc-lnbio.github.io/KVFinder-web).
 
 ### KVFinder-web service
 
-KVFinder-web service is a RESTful web service that runs [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software to detect and chacterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
+KVFinder-web service is a RESTful web service that runs an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) to detect and characterize cavities. KVFinder-web service has three modules: web, queue and worker. Each one runs in single docker containers, but they are combined into a docker-compose configuration file.
 
 We provide a publicly available KVFinder-web service ([https://kvfinder-web.cnpem.br](https://kvfinder-web.cnpem.br)), with [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal) as the graphical web interface.
 
-Our public KVFinder-web service is hosted in a Cloud environment, that has some limitations compared to parKVFinder standalone version, which are stated on the documentation. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
+Our public KVFinder-web service is hosted in a cloud environment, that has some limitations compared to parKVFinder standalone version, which are stated on the documentation. Hence, users may opt to run jobs on our public KVFinder-web service or on a locally configured server.
 
 #### Local installation
 
@@ -56,12 +58,7 @@ Example of job request:
 
 ```json
 {
-  "pdb": [
-    "MODEL        1\n",
-    "ATOM      1  N   GLU E  13      -6.693 -15.642 -14.858  1.00100.00           N  \n",
-    (...)
-   "END\n"
-  ],
+  "pdb": "MODEL        1\nATOM      1  N   GLU E  13      -6.693 -15.642 -14.858  1.00100.00           N  \n(...)\nEND\n",
   "settings": {
     "modes": {
       "whole_protein_mode": true,
@@ -104,14 +101,42 @@ To request a job:
 - GET /:id
   - Method: GET
   - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
-  
+
 Where *:id* is the job id received from the KVFinder-web service as submission response.
+
+Example of response obtained for a *job* with status "queued":
+
+```json
+  {
+    "id": "4990580026958948484",
+    "status": "queued",
+    "output": null,
+    "created_at": "2023-03-03T18:55:28.439300871Z",
+    "started_at": null,
+    "ended_at": null,
+    "expires_after": "1day"
+  }
+```
+
+Example of response obtained for a *job* with status "running":
+
+```json
+  {
+    "id": "4990580026958948484",  
+    "status": "running",  
+    "output": null,  
+    "created_at": "2023-03-03T18:55:28.439300871Z",  
+    "started_at": "2023-03-03T18:55:31.416200437Z",    
+    "ended_at": null,  
+    "expires_after": "1day"
+  }
+```
 
 Example of response obtained for a *job* with status "completed":
 
 ```json
 {
-  "id": "17275205978013541183",
+  "id": "4990580026958948484",
   "status": "completed",
   "output": {
     "pdb_kv": "ATOM      1  HS  KAA   259     -15.000 -10.200   0.000  1.00  0.00\nATOM      2(...)",
@@ -130,14 +155,14 @@ To retrieve a job input:
 - GET /retrieve-input/:id*
   - Method: GET
   - URL: [http://localhost:8081/retrieve-input/:id](http://localhost:8081/retrieve-input/:id)
-  
+
 Where *:id*  is the job id received from the server as submission response.
 
 Example of response obtained for a requested *job* input:
 
 ```json
 {
-  "id": "17275205978013541183",
+  "id": "4990580026958948484",
   "input": {
     "pdb": "ATOM   25  OD1 ASP E 323       0.497  12.598  16.506  1.00 40.80           O  \nATOM      26(...)",
     "pdb_ligand": null,
