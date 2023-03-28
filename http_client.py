@@ -109,6 +109,10 @@ class KVClient:
         r = requests.post(f"{self.server}/create", json=kv_job.input)
         if r.ok:
             kv_job.id = r.json()["id"]
+            if "queue_size" in r.json():
+                print(f"Job submitted to queue with {r.json()['queue_size']} jobs ahead.")
+            else:
+                print("Job retrieved from cache.")
             return True
         else:
             print("Debug:", r)

@@ -1,0 +1,11 @@
+kvfinder-web.cnpem.br {
+	# tls cert.pem key.pem
+	tls /etc/ssl/certs/cnpem.br_chain.crt /etc/ssl/private/cnpem.br_nopass.key
+	handle_path /api* {
+		reverse_proxy kv-server:8081
+	}
+
+	handle {
+		reverse_proxy kvshiny:3838
+	}
+}
