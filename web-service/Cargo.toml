@@ -1,6 +1,6 @@
 [package]
 name = "kvweb"
-version = "0.5.0"
+version = "1.1.0"
 authors = [
     "Jose Geraldo de Carvalho Pereira <jose.pereira@lnbio.cnpem.br>, Joao Victor da Silva Guerra <joao.guerra@lnbio.cnpem.br>",
 ]

@@ -1037,8 +1037,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "kv"
-version = "0.4.0"
+name = "kvweb"
+version = "1.1.0"
 dependencies = [
  "actix-web",
  "base64 0.21.0",

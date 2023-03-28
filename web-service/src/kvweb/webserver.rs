@@ -38,12 +38,7 @@ pub async fn hello() -> impl Responder {
     "KVFinder-web service"
 }
 
-pub fn create_ocypod_queue(
-    queue_name: &str,
-    timeout: &str,
-    expires_after: &str,
-    retries: i32,
-) {
+pub fn create_ocypod_queue(queue_name: &str, timeout: &str, expires_after: &str, retries: i32) {
     let client = reqwest::Client::new();
     let queue_url = format!("http://ocypod:8023/queue/{}", queue_name);
     let queue_config = QueueConfig {
@@ -57,7 +52,6 @@ pub fn create_ocypod_queue(
     //     Err(e) => HttpResponse::InternalServerError().body(format!("{:?}", e)),
     // }
 }
-
 
 /// Get job queue id for a job "tag id". The tag id is created applying a hash
 /// function to received data (input data). It is the id sent to users. The queue
@@ -82,7 +76,7 @@ fn get_job(tag_id: String) -> Result<Option<Job>, reqwest::Error> {
         let url = format!("http://ocypod:8023/job/{}?fields=status,output,created_at,started_at,ended_at,expires_after", queue_id);
         let mut j: Job = reqwest::get(url.as_str())?.json()?;
         j.id = tag_id;
-        if let Some(output) =  &mut j.output {
+        if let Some(output) = &mut j.output {
             output.pdb_kv = super::decompress(&output.pdb_kv).expect("decompression error");
             output.report = super::decompress(&output.report).expect("decompression error");
             output.log = super::decompress(&output.log).expect("decompression error");
@@ -122,15 +116,16 @@ pub async fn ask(id: web::Path<String>) -> impl Responder {
 /// Also, before create a job, it checks if a job with the same parameters (hash -> tag id)
 /// are not yet into queue. If it is, it responds with job data.
 pub async fn create(job_input: web::Json<Input>) -> impl Responder {
-    // json input values to inp
+    // json input values to input struct
     let input = job_input.into_inner();
+    // check input values (pdb, pdb_ligand, ...)
     if let Err(e) = &input.check() {
         return HttpResponse::BadRequest().body(format!("{:?}", e));
     }
     // compress pdb data to reduce queue memory usage.
     let compressed_input = Input {
         pdb: super::compress(&input.pdb).expect("compression error"),
-        pdb_ligand: match input.pdb_ligand { 
+        pdb_ligand: match input.pdb_ligand {
             Some(lig) => Some(super::compress(&lig).expect("compression error")),
             None => None,
         },
@@ -144,12 +139,23 @@ pub async fn create(job_input: web::Json<Input>) -> impl Responder {
     // closure to sends data to queue
     let create_job = || {
         let client = reqwest::Client::new();
+
+        // get current queue size (number of jobs in queue) to calculate estimated time to finish the job (max time to finish = queue size * timeout)
+        let queue_size = client
+            .get("http://ocypod:8023/queue/kvfinder/size")
+            .send()
+            .unwrap()
+            .text()
+            .unwrap();
+
         let response = client
             .post("http://ocypod:8023/queue/kvfinder/job")
             .json(&data)
             .send();
+
         match response {
-            Ok(_) => HttpResponse::Ok().json(json!({"id":data.tags[0]})),
+            // if job is created, return job id and queue size (number of jobs in queue)
+            Ok(_) => HttpResponse::Ok().json(json!({"id": data.tags[0], "queue_size": queue_size})),
             Err(e) => HttpResponse::InternalServerError().body(format!("{:?}", e)),
         }
     };
@@ -164,20 +170,22 @@ pub async fn create(job_input: web::Json<Input>) -> impl Responder {
     }
 }
 
-
 fn get_input(tag_id: String) -> Result<Option<JobInput>, reqwest::Error> {
     let queue_id = get_queue_id(&tag_id);
 
     let get_job_input = |queue_id| {
-        let url = format!("http://ocypod:8023/job/{}?fields=input,created_at", queue_id);
+        let url = format!(
+            "http://ocypod:8023/job/{}?fields=input,created_at",
+            queue_id
+        );
         // let url = format!("http://localhost:8023/job/{}?fields=input,created_at", queue_id);
         let mut job_input: JobInput = reqwest::get(url.as_str())?.json()?;
 
         job_input.id = tag_id;
         job_input.input.pdb = super::decompress(&job_input.input.pdb).expect("decompression error");
         job_input.input.pdb_ligand = match job_input.input.pdb_ligand {
-                Some(lig) => Some(super::decompress(&lig).expect("decompression error")),
-                None => None,  
+            Some(lig) => Some(super::decompress(&lig).expect("decompression error")),
+            None => None,
         };
 
         Ok(Some(job_input))
@@ -190,7 +198,6 @@ fn get_input(tag_id: String) -> Result<Option<JobInput>, reqwest::Error> {
         // return job input in json
         Ok(Some(queue_id)) => return get_job_input(queue_id),
     }
-
 }
 
 // GET /retrieve-input/{:id}
@@ -204,5 +211,3 @@ pub async fn retrieve_input(id: web::Path<String>) -> impl Responder {
         Ok(Some(j)) => HttpResponse::Ok().json(j),
     }
 }
-
-
