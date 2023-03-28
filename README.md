@@ -7,17 +7,17 @@ Welcome to the KVFinder-web service, this page was built to help you get started
 
 ## KVFinder-web
 
-KVFinder-web is an open-source web-based application of an updated version of [parKVFinder](https://github.com/LBC-LNBio) software (v1.2.0) cavity detection and characterization of any type of biomolecular structure. The characterization includes spatial, depth, constitutional and hydropathy characterization.
+KVFinder-web is an open-source web-based application of an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) cavity detection and characterization of any type of biomolecular structure. The characterization includes spatial, depth, constitutional and hydropathy characterization.
 
 The KVFinder-web has two independent components:
 
 - a RESTful web service: [KVFinder-web service](https://github.com/LBC-LNBio/KVFinder-web-service);
-- a graphical web portal: [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal)
+- a graphical web portal: [KVFinder-web portal](https://github.com/LBC-LNBio/KVFinder-web-portal).
 
 To broaden the range of possibilities for user interaction, we also provide additional client-side applications, that are:
 
 - a graphical PyMOL plugin: [PyMOL KVFinder-web Tools](https://github.com/LBC-LNBio/PyMOL-KVFinder-web-Tools);
-- an example of a Python HTTP client: [http-client.py](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http_client.py)
+- an example of a Python HTTP client: [http-client.py](https://github.com/LBC-LNBio/KVFinder-web-service/blob/master/http_client.py).
 
 The full KVFinder-web documentation can be found here: [http://lbc-lnbio.github.io/KVFinder-web](http://lbc-lnbio.github.io/KVFinder-web).
 
