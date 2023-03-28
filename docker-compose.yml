@@ -1,4 +1,5 @@
 version: '3'
+name: kvfinder_web_service
 
 services:
   kv-server:
