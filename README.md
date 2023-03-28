@@ -54,6 +54,26 @@ To create a job:
   - Media type: 'application/json'
   - URL: [http://localthost:8081/create](http://localthost:8081/create)
 
+The response to 'create' contains the job *id* and the number of jobs already waiting in the queue to be processed.
+
+```json
+{
+  "id": "4990580026958948484",
+  "queue_size": 0,
+}
+```
+
+If you try to "recreate" a job in the queue, the response of `GET /:id` is processed and no information about the position in the queue is sent.
+
+
+To request a job:
+
+- GET /:id
+  - Method: GET
+  - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
+
+Where *:id* is the job id received from the KVFinder-web service as submission response.
+
 Example of job request:
 
 ```json
@@ -95,14 +115,6 @@ Example of job request:
   }
 }
 ```
-
-To request a job:
-
-- GET /:id
-  - Method: GET
-  - URL: [http://localhost:8081/:id](http://localhost:8081/:id)
-
-Where *:id* is the job id received from the KVFinder-web service as submission response.
 
 Example of response obtained for a *job* with status "queued":
 
