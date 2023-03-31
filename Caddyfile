@@ -6,6 +6,6 @@ kvfinder-web.cnpem.br {
 	}
 
 	handle {
-		reverse_proxy kvshiny:3838
+		reverse_proxy kv-portal:3838
 	}
 }

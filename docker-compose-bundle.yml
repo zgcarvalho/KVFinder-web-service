@@ -39,9 +39,9 @@ services:
     volumes:
       - ocypod-redis-data:/data
 
-  kvshiny:
+  kv-portal:
     build:
-      context: ../KVshiny-docker
+      context: ../KVFinder-web-portal/
     depends_on:
       - "kv-server"
     ports:

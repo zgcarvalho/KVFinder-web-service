@@ -39,9 +39,9 @@ services:
     volumes:
       - ocypod-redis-data:/data
 
-  kvshiny:
+  kv-portal:
     build:
-      context: ../KVshiny-docker
+      context: ../KVFinder-web-portal
     depends_on:
       - "kv-server"
     #ports:
@@ -51,7 +51,7 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
-      - "kvshiny"
+      - "kv-portal"
     ports:
       - 80:80
       - 443:443

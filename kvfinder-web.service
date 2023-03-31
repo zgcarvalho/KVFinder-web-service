@@ -8,8 +8,8 @@ Type=oneshot
 RemainAfterExit=yes
 #Restart=always
 WorkingDirectory=/home/ubuntu/KVFinder-web-service
-ExecStart=/usr/bin/docker-compose -f docker-compose-shiny-https.yml up --build -d
-ExecStop=/usr/bin/docker-compose -f docker-compose-shiny-https.yml down
+ExecStart=/usr/bin/docker-compose -f docker-compose-bundle-https.yml up --build -d
+ExecStop=/usr/bin/docker-compose -f docker-compose-bundle-https.yml down
 
 [Install]
 WantedBy=multi-user.target
