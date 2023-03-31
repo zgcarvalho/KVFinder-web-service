@@ -7,7 +7,7 @@ Welcome to the KVFinder-web service, this page was built to help you get started
 
 ## KVFinder-web
 
-KVFinder-web is an open-source web-based application of an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) cavity detection and characterization of any type of biomolecular structure. The characterization includes spatial, depth, constitutional and hydropathy characterization.
+KVFinder-web is an open-source web-based application of an updated version of [parKVFinder](https://github.com/LBC-LNBio/parKVFinder) software (v1.2.0) for cavity detection and characterization of any type of biomolecular structure. The characterization includes spatial, depth, constitutional and hydropathy characterization.
 
 The KVFinder-web has two independent components:
 
